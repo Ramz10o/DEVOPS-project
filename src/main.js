@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -10,8 +11,14 @@ const port = 6969;
 
 app.use(express.json());
 
+app.use(express.static("frontend"));
+
 let users = [];         
 let messages = [];      
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, "frontend", "index.html"));;
+});
 
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK', message: 'Server is healthy', uptime: process.uptime() });
