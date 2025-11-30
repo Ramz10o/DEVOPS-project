@@ -11,13 +11,13 @@ const port = 6969;
 
 app.use(express.json());
 
-app.use(express.static("frontend"));
+app.use(express.static(path.join(__dirname, "frontend")));
 
 let users = [];         
 let messages = [];      
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, "frontend", "index.html"));;
+    res.sendFile("index.html", { root: path.join(__dirname, "frontend")});
 });
 
 app.get('/health', (req, res) => {
