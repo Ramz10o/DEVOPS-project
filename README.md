@@ -94,8 +94,8 @@ chat-microservice/
 │ └── service.yaml # Kubernetes Service (NodePort)
 │
 └── .github/
-└── workflows/
-└── ci-cd.yml # GitHub Actions CI/CD Pipeline
+  └── workflows/
+    └── ci-cd.yml # GitHub Actions CI/CD Pipeline
 ```
 
 ---
