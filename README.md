@@ -43,7 +43,7 @@ Additionally, the app is live and hosted on **Render** for public access.
 ---
 
 ## 🏛️ Architecture Overview
-
+```
 ┌──────────────────────┐
 │ Client Browser │
 │ (HTML + JS Frontend) │
@@ -67,12 +67,14 @@ Additionally, the app is live and hosted on **Render** for public access.
 │ Kubernetes │
 │ Deployment + Service │
 └────────────────────────┘
+```
 
 
 ---
 
 ## 📂 Folder Structure
 
+```
 chat-microservice/
 │
 ├── src/
@@ -94,7 +96,7 @@ chat-microservice/
 └── .github/
 └── workflows/
 └── ci-cd.yml # GitHub Actions CI/CD Pipeline
-
+```
 
 ---
 
