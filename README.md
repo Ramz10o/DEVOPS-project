@@ -63,10 +63,10 @@ Additionally, the app is live and hosted on **Render** for public access.
  └───────────▲───────────┘
              │
              │ kubectl apply
-┌───────────┴───────────┐
-│ Kubernetes            │
-│ Deployment + Service  │
-└───────────────────────┘
+┌────────────┴───────────┐
+│ Kubernetes             │
+│ Deployment + Service   │ 
+└────────────────────────┘
 ```
 
 
