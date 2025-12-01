@@ -271,12 +271,12 @@ You are free to use, modify, and distribute it as needed.
 
 ## 👨‍💻 Author
 
-**Ramz*  
+**Ramz**
 Full-Stack Developer & DevOps Engineer  
 Real-time microservices | Kubernetes | CI/CD | Cloud Deployment  
 
 For queries or collaboration:  
-📧 *your-email@example.com*
+📧 *ramzpaianaguppam@gmail.com*
 
 ---
 
