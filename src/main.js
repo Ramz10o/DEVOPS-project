@@ -82,7 +82,15 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
+
+        messages = messages.filter(msg => 
+            msg.sender !== users.find(u => u.socketId === socket.id)?.username &&
+            msg.receiver !== users.find(u => u.socketId === socket.id)?.username
+        );
+
         users = users.filter(u => u.socketId !== socket.id);
+
+        console.log('Messages after disconnect cleanup: ', messages);
 
         io.emit('userList', users);
 
