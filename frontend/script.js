@@ -81,6 +81,7 @@ document.getElementById("sendBtn").onclick = () => {
 
 function addMessage(text, type) {
     let div = document.createElement("div");
+    div.scrollIntoView();
     div.className = "message";
     div.innerText = text;
     div.style.borderRadius = "10px";
@@ -93,7 +94,6 @@ function addMessage(text, type) {
     type === "sent" ? div.animate([{ opacity: 0, transform: "translateY(100%)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 300 }) 
     : div.animate([{ opacity: 0, transform: "translateY(-100%)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 300 });   
     document.getElementById("messages").appendChild(div);
-    div.scrollIntoView();
 }
 
 function formatMessage(msg) {
