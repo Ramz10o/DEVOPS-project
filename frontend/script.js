@@ -30,7 +30,7 @@ socket.on("userList", (users) => {
     const list = document.getElementById("usersList");
     list.innerHTML = "";
 
-    users.forEach(u => {
+    users.sort((a, b) => a.username.localeCompare(b.username)).forEach(u => {
         if (u.username === username) return;
 
         let li = document.createElement("li");
