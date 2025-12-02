@@ -117,7 +117,7 @@ chat-microservice/
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/<your-username>/chat-microservice.git
+git clone https://github.com/ramz10o/chat-microservice.git
 cd chat-microservice
 ```
 
