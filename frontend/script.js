@@ -83,6 +83,11 @@ function addMessage(text, type) {
     let div = document.createElement("div");
     div.className = "message";
     div.innerText = text;
+    div.style.display = "flex";
+    div.style.justifyContent = "space-between";
+    div.style.flexDirection = "column";
+    div.style.borderRadius = "10px";
+    div.style.boxShadow = "0 0 5px rgba(255, 255, 255, 1)";
     div.style.backgroundColor = type === "sent" ? "#86ff94ff" : "#fdffa3ff";
     div.style.alignSelf = type === "sent" ? "flex-end" : "flex-start";
     div.style.margin = "5px";
