@@ -30,6 +30,9 @@ body {
     border-radius: 5px;
     overflow-y: scroll;
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .message {
