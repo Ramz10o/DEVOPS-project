@@ -91,6 +91,7 @@ function addMessage(text, type) {
     div.style.width = "fit-content";
     div.style.maxWidth = "60%";
     document.getElementById("messages").appendChild(div);
+    div.focus();
 }
 
 function formatMessage(msg) {
