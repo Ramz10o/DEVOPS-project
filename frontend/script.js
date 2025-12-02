@@ -90,6 +90,8 @@ function addMessage(text, type) {
     div.style.padding = "10px";
     div.style.width = "fit-content";
     div.style.maxWidth = "60%";
+    type === "sent" ? div.animate([{ opacity: 0, transform: "translateY(100%)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 300 }) 
+    : div.animate([{ opacity: 0, transform: "translateY(-100%)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 300 });   
     document.getElementById("messages").appendChild(div);
     div.scrollIntoView();
 }
