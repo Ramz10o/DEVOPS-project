@@ -89,6 +89,7 @@ function addMessage(text, type) {
     div.style.margin = "5px";
     div.style.padding = "10px";
     div.style.width = "fit-content";
+    div.style.maxWidth = "60%";
     document.getElementById("messages").appendChild(div);
 }
 
