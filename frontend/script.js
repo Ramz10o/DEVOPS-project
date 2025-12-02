@@ -85,7 +85,7 @@ function addMessage(text, type) {
     div.innerText = text;
     div.style.borderRadius = "10px";
     div.style.backgroundColor = type === "sent" ? "#86ff94ff" : "#fdffa3ff";
-    div.style.alignSelf = type === "sent" ? "flex-start" : "flex-end";
+    div.style.alignSelf = type === "sent" ? "flex-end" : "flex-start";
     div.style.margin = "5px";
     div.style.padding = "10px";
     div.style.width = "fit-content";
