@@ -66,7 +66,16 @@ io.on('connection', (socket) => {
         }
 
         io.emit('userList', users);
+        io.to(socket.id).emit('socketId', socket.id);
         console.log('Registered users: ', users);
+    });
+
+    socket.on('typing', ({ sender, receiver }) => {
+        io.to(receiver).emit('typing', { sender });
+    });
+
+    socket.on('stopTyping', ({ sender, receiver }) => {
+        io.to(receiver).emit('stopTyping', { sender });
     });
 
     socket.on('message', ({ sender, receiver, content }) => {

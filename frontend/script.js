@@ -1,6 +1,7 @@
 const socket = io();
 
 let username = null;
+let sender = null;
 let receiver = null;
 let allMessages = [];
 
@@ -9,6 +10,15 @@ document.addEventListener("DOMContentLoaded", () => {
         username = prompt("Enter your username:");
     }
 
+    document.getElementById("msgInput").addEventListener("focus", () => {
+        document.getElementById("msgInput").value = "";
+        socket.emit("typing", { sender: sender.socketId, receiver: receiver.socketId });
+    });
+
+    document.getElementById("msgInput").addEventListener("blur", () => {
+        socket.emit("stopTyping", { sender: sender.socketId, receiver: receiver.socketId });
+    });
+
     document.getElementById("welcomeText").innerText = `Welcome, ${username}!`;
 
     socket.emit("registerUser", { username });
@@ -16,6 +26,22 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("msgInput").onkeydown = (e) => {
         if (e.key === "Enter") document.getElementById("sendBtn").click();
     };
+});
+
+socket.on('socketId', (id) => {
+    sender = { username, socketId: id };
+});
+
+socket.on("typing", (data) => {
+    if (data.sender === receiver.socketId && data.receiver === sender.socketId) {
+        document.getElementById("currentChat").innerText = `Chatting with: ${receiver.username} (typing...)`;
+    }
+});
+
+socket.on("stopTyping", (data) => {
+    if (data.sender === receiver.socketId && data.receiver === sender.socketId) {
+        document.getElementById("currentChat").innerText = `Chatting with: ${receiver.username}`;
+    }
 });
 
 socket.on("userList", (users) => {
@@ -27,6 +53,7 @@ socket.on("userList", (users) => {
         receiver = null;
     }
 
+
     const list = document.getElementById("usersList");
     list.innerHTML = "";
 
@@ -36,10 +63,15 @@ socket.on("userList", (users) => {
         let li = document.createElement("li");
         li.className = "userItem";
         li.innerText = u.username;
+        li.id = u.socketId;
 
         li.onclick = () => {
-            receiver = u.username;
-            document.getElementById("currentChat").innerText = "Chatting with: " + receiver;
+            if (receiver) {
+                document.getElementById(receiver.socketId).style.backgroundColor = "#29d4ff";
+            }
+            receiver = { socketId: u.socketId, username: u.username };
+            li.style.backgroundColor = "#24f8b8ff";
+            document.getElementById("currentChat").innerText = "Chatting with: " + receiver.username;
             renderMessages();
         };
 
@@ -53,8 +85,8 @@ socket.on("newMessage", (msg) => {
     if (!receiver) return;
 
     if (
-        (msg.sender === receiver && msg.receiver === username) ||
-        (msg.sender === username && msg.receiver === receiver)
+        (msg.sender === receiver.username && msg.receiver === username) ||
+        (msg.sender === username && msg.receiver === receiver.username)
     ) {
         addMessage(formatMessage(msg), msg.sender === username ? "sent" : "received");
     }
@@ -67,8 +99,8 @@ document.getElementById("sendBtn").onclick = () => {
     if (!content.trim()) return;
 
     const msg = {
-        sender: username,
-        receiver,
+        sender: sender.socketId,
+        receiver: receiver.socketId,
         content
     };
 
@@ -106,8 +138,8 @@ function renderMessages() {
     document.getElementById("messages").innerHTML = "";
     allMessages
         .filter(msg =>
-            (msg.sender === username && msg.receiver === receiver) ||
-            (msg.receiver === username && msg.sender === receiver)
+            (msg.sender === username && msg.receiver === receiver.username) ||
+            (msg.receiver === username && msg.sender === receiver.username)
         )
         .forEach(msg => {
             addMessage(formatMessage(msg), msg.sender === username ? "sent" : "received");
