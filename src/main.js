@@ -71,11 +71,11 @@ io.on('connection', (socket) => {
     });
 
     socket.on('typing', ({ sender, receiver }) => {
-        io.to(receiver).emit('typing', { sender });
+        io.to(receiver.socketId).emit('typing', { sender });
     });
 
     socket.on('stopTyping', ({ sender, receiver }) => {
-        io.to(receiver).emit('stopTyping', { sender });
+        io.to(receiver.socketId).emit('stopTyping', { sender });
     });
 
     socket.on('message', ({ sender, receiver, content }) => {
@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
 
         messages.push(newMessage);
 
-        const user = users.find(u => u.username === receiver)
+        const user = users.find(u => u.socketId === receiver)
         
         if (user) {
             io.to(user.socketId).emit('newMessage', newMessage);

@@ -11,12 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.getElementById("msgInput").addEventListener("focus", () => {
-        document.getElementById("msgInput").value = "";
-        socket.emit("typing", { sender: sender.socketId, receiver: receiver.socketId });
+        socket.emit("typing", { sender, receiver });
     });
 
     document.getElementById("msgInput").addEventListener("blur", () => {
-        socket.emit("stopTyping", { sender: sender.socketId, receiver: receiver.socketId });
+        socket.emit("stopTyping", { sender, receiver });
     });
 
     document.getElementById("welcomeText").innerText = `Welcome, ${username}!`;
@@ -33,13 +32,15 @@ socket.on('socketId', (id) => {
 });
 
 socket.on("typing", (data) => {
-    if (data.sender === receiver.socketId && data.receiver === sender.socketId) {
+    document.getElementById(`${data.sender.socketId}`).innerText = `${data.sender.username} (typing...)`;
+    if (data.sender === receiver.socketId) {
         document.getElementById("currentChat").innerText = `Chatting with: ${receiver.username} (typing...)`;
     }
 });
 
 socket.on("stopTyping", (data) => {
-    if (data.sender === receiver.socketId && data.receiver === sender.socketId) {
+    document.getElementById(`${data.sender.socketId}`).innerText = data.sender.username;
+    if (data.sender === receiver.socketId) {
         document.getElementById("currentChat").innerText = `Chatting with: ${receiver.username}`;
     }
 });
