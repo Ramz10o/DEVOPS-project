@@ -86,10 +86,10 @@ socket.on("newMessage", (msg) => {
     if (!receiver) return;
 
     if (
-        (msg.sender === receiver.username && msg.receiver === username) ||
-        (msg.sender === username && msg.receiver === receiver.username)
+        (msg.sender.socketId === receiver.socketId && msg.receiver.socketId === sender.socketId) ||
+        (msg.sender.socketId === sender.socketId && msg.receiver.socketId === receiver.socketId)
     ) {
-        addMessage(formatMessage(msg), msg.sender === username ? "sent" : "received");
+        addMessage(formatMessage(msg), msg.sender.socketId === sender.socketId ? "sent" : "received");
     }
 });
 
@@ -100,8 +100,8 @@ document.getElementById("sendBtn").onclick = () => {
     if (!content.trim()) return;
 
     const msg = {
-        sender: sender.socketId,
-        receiver: receiver.socketId,
+        sender,
+        receiver,
         content
     };
 

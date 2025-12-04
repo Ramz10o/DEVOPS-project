@@ -82,11 +82,9 @@ io.on('connection', (socket) => {
         const newMessage = { sender, receiver, content, timestamp: new Date() };
 
         messages.push(newMessage);
-
-        const user = users.find(u => u.socketId === receiver)
-        
+       
         if (user) {
-            io.to(user.socketId).emit('newMessage', newMessage);
+            io.to(sender.socketId).emit('newMessage', newMessage);
         }
     });
 
