@@ -37,8 +37,27 @@ app.get('/message/:username', (req, res) => {
 
 app.post('/notifyMessage', (req, res) => {
     const { sender, receiver, content } = req.body;
+    
+    if (!sender || !receiver || !content) {
+        return res.status(400).json({ status: 'Error', sent: false, message: 'Invalid request' });
+    }
 
-    const newMessage = { sender, receiver, content, timestamp: new Date() };
+    const senderObj = users.find(u => u.username === sender);
+    if (!senderObj) {
+        return res.status(404).json({ status: 'Error', sent: false, message: 'Sender not found' });
+    }
+
+    const receiverObj = users.find(u => u.username === receiver);
+    if (!receiverObj) {
+        return res.status(404).json({ status: 'Error', sent: false, message: 'Receiver not found' });
+    }
+
+    const newMessage = { 
+        sender: { socketId: senderObj.socketId, username: senderObj.username }, 
+        receiver: { socketId: receiverObj.socketId, username: receiverObj.username }, 
+        content, 
+        timestamp: new Date() 
+    };
 
     messages.push(newMessage);
     const user = users.find(u => u.username === receiver);
@@ -61,47 +80,51 @@ io.on('connection', (socket) => {
             users.push({ socketId: socket.id, username: user.username });
             console.log(`User registered: ${user.username}`);
         } else {
-            existing.socketId = socket.id;
-            console.log(`User re-registered: ${user.username}`);
+            io.emit('duplicteUser', user.username);
+            return;
         }
 
         io.emit('userList', users);
         io.to(socket.id).emit('socketId', socket.id);
+        io.to(socket.id).emit('userList', users);
         console.log('Registered users: ', users);
     });
 
     socket.on('typing', ({ sender, receiver }) => {
+        console.log(`${sender.username} is typing to ${receiver.username}`);
         io.to(receiver.socketId).emit('typing', { sender });
     });
 
     socket.on('stopTyping', ({ sender, receiver }) => {
+        console.log(`${sender.username} stopped typing to ${receiver.username}`);
         io.to(receiver.socketId).emit('stopTyping', { sender });
     });
 
-    socket.on('message', ({ sender, receiver, content }) => {
-        const newMessage = { sender, receiver, content, timestamp: new Date() };
+    socket.on('message', ({ sender, receiver, content, timestamp }) => {
+        const newMessage = { sender, receiver, content, timestamp };
 
         messages.push(newMessage);
-       
+        const user = users.find(u => u.socketId === receiver.socketId);
+
         if (user) {
-            io.to(sender.socketId).emit('newMessage', newMessage);
+            io.to(receiver.socketId).emit('newMessage', newMessage);
         }
     });
 
     socket.on('disconnect', () => {
 
         messages = messages.filter(msg => 
-            msg.sender !== users.find(u => u.socketId === socket.id)?.username &&
-            msg.receiver !== users.find(u => u.socketId === socket.id)?.username
+            msg.sender.socketId !== socket.id &&
+            msg.receiver.socketId !== socket.id        
         );
 
         users = users.filter(u => u.socketId !== socket.id);
 
-        console.log('Messages after disconnect cleanup: ', messages);
+        console.log('Messages after disconnect cleanup : ', messages);
 
         io.emit('userList', users);
 
-        console.log('A user disconnected : ', socket.id);
+        console.log(`A user disconnected : ${socket.id}`);
     });
 });
 
