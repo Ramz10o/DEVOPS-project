@@ -48,16 +48,10 @@ socket.on("duplicteUser", (username) => {
 
 socket.on("typing", (user) => {
     document.getElementById(user.sender.socketId).innerText = `${user.sender.username} (typing...)`;
-    if (user.sender.socketId === receiver.socketId) {
-        document.getElementById("currentChat").innerText = `Chatting with: ${receiver.username} (typing...)`;
-    }
 });
 
 socket.on("stopTyping", (user) => {
     document.getElementById(user.sender.socketId).innerText = user.sender.username;
-    if (user.sender.socketId === receiver.socketId) {
-        document.getElementById("currentChat").innerText = `Chatting with: ${receiver.username}`;
-    }
 });
 
 socket.on("userList", (users) => {
