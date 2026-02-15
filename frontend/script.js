@@ -30,7 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.emit("registerUser", { username });
 
     document.getElementById("msgInput").onkeydown = (e) => {
-        if (e.key === "Enter") document.getElementById("sendBtn").click();
+        if (e.key === "Enter") {
+            document.getElementById("sendBtn").click();
+            document.getElementById("msgInput").blur();
+        }
     };
 });
 
@@ -122,6 +125,7 @@ document.getElementById("sendBtn").onclick = () => {
 
     addMessage(`You : ${content}`, "sent");
     document.getElementById("msgInput").value = "";
+    document.getElementById("msgInput").blur();
 };
 
 function addMessage(text, type) {
